@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateExampleDto } from './dtos/create-example.dto';
+import { UpdateExampleDto } from './dtos/update-example.dto';
 import { Example } from './entities/example.entity';
 import { ExampleService } from './example.service';
 
@@ -16,6 +17,18 @@ export class ExampleResolver {
   ): Promise<boolean> {
     try {
       await this.exampleService.createExample(createExampleDto);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+  @Mutation((returns) => Boolean)
+  async updateExample(
+    @Args('input') updateExampleDto: UpdateExampleDto,
+  ): Promise<boolean> {
+    try {
+      await this.exampleService.updateExample(updateExampleDto);
       return true;
     } catch (e) {
       console.log(e);
