@@ -7,4 +7,7 @@ export class Example {
 
   @Field((types) => Boolean, { nullable: true })
   isGood: true;
+
+  @Field((types) => String)
+  title: string;
 }
