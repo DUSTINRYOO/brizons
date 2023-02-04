@@ -1,27 +1,26 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { number } from 'joi';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class Example {
   @PrimaryGeneratedColumn()
-  @Field((types) => Number)
+  @Field((type) => Number)
   id: number;
 
-  @Field((types) => String)
+  @Field((type) => String)
   @Column()
   name: string;
 
-  @Field((types) => Boolean, { nullable: true })
+  @Field((type) => Boolean)
   @Column()
-  isGood: true;
+  isGood: boolean;
 
-  @Field((types) => String)
+  @Field((type) => String)
   @Column()
   title: string;
 
-  @Field((types) => String)
+  @Field((type) => String)
   @Column()
   category: string;
 }

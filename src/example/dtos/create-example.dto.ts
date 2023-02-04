@@ -2,17 +2,17 @@ import { ArgsType, Field } from '@nestjs/graphql';
 import { IsBoolean, IsString, Length } from 'class-validator';
 
 @ArgsType()
-export class createExampleDto {
-  @Field((type) => Boolean)
-  @IsBoolean()
-  firstOne: Boolean;
+export class CreateExampleDto {
+  @Field((type) => String)
+  @IsString()
+  name: string;
 
   @Field((type) => Boolean)
   @IsBoolean()
-  isGood: Boolean;
+  isGood: boolean;
 
   @Field((type) => String)
   @IsString()
   @Length(5, 10)
-  title: String;
+  title: string;
 }
