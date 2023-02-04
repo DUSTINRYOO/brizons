@@ -10,10 +10,8 @@ export class ExampleResolver {
     return [];
   }
   @Mutation((returns) => Boolean)
-  createExample(
-    @Args('createExample') createExample: createExampleDto,
-  ): boolean {
-    console.log(createExample);
+  createExample(@Args() createExampleDto: createExampleDto): boolean {
+    console.log(createExampleDto);
     return true;
   }
 }
