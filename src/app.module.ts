@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExampleModule } from './example/example.module';
 import * as Joi from 'joi';
+import { Example } from './example/entities/example.entity';
 
 @Module({
   imports: [
@@ -35,8 +36,9 @@ import * as Joi from 'joi';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== 'prod',
       logging: true,
+      entities: [Example],
     }),
   ],
   controllers: [AppController],
