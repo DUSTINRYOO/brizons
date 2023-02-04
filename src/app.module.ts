@@ -9,7 +9,7 @@ import { ExampleModule } from './example/example.module';
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: true,
       driver: ApolloDriver,
     }),
     ExampleModule,
