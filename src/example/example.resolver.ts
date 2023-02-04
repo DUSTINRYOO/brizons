@@ -12,7 +12,7 @@ export class ExampleResolver {
   }
   @Mutation((returns) => Boolean)
   async createExample(
-    @Args() createExampleDto: CreateExampleDto,
+    @Args('input') createExampleDto: CreateExampleDto,
   ): Promise<boolean> {
     try {
       await this.exampleService.createExample(createExampleDto);
