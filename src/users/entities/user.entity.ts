@@ -3,6 +3,7 @@ import { CoreEntity } from 'src/common/entities/core.entity';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
+import { IsEmail, IsString } from 'class-validator';
 
 @InputType({ isAbstract: true })
 @ObjectType()
@@ -10,14 +11,17 @@ import { InternalServerErrorException } from '@nestjs/common';
 export class User extends CoreEntity {
   @Column()
   @Field((type) => String)
+  @IsString()
   username: string;
 
   @Column()
   @Field((type) => String)
+  @IsString()
   password: string;
 
   @Column()
   @Field((type) => String)
+  @IsEmail()
   email: string;
 
   @BeforeInsert()
@@ -28,7 +32,14 @@ export class User extends CoreEntity {
         +process.env.PW_SALTROUND,
       );
     } catch (e) {
-      console.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
+  async checkPassword(aPassword: string): Promise<boolean> {
+    try {
+      const ok = await bcrypt.compare(aPassword, this.password);
+      return ok;
+    } catch (e) {
       throw new InternalServerErrorException();
     }
   }
