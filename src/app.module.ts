@@ -8,6 +8,9 @@ import { AppService } from './app.service';
 import { ExampleModule } from './example/example.module';
 import * as Joi from 'joi';
 import { Example } from './example/entities/example.entity';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -38,8 +41,10 @@ import { Example } from './example/entities/example.entity';
       database: process.env.DB_DATABASE,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
-      entities: [Example],
+      entities: [Example, User],
     }),
+    UsersModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
