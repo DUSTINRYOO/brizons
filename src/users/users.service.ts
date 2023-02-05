@@ -8,16 +8,17 @@ import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EditProfileInput } from './dtos/edit-profile.dto';
+import { Verification } from './entities/verification.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    @InjectRepository(Verification)
+    private readonly verifications: Repository<Verification>,
     private readonly config: ConfigService,
     private readonly jwtService: JwtService,
-  ) {
-    console.log(this.config.get('SECRET_KEY'));
-  }
+  ) {}
 
   async createAccount({
     username,
@@ -33,7 +34,14 @@ export class UsersService {
           error: 'There is a user with that username or email already',
         };
       }
-      await this.users.save(this.users.create({ username, password, email }));
+      const user = await this.users.save(
+        this.users.create({ username, email, password }),
+      );
+      await this.verifications.save(
+        this.verifications.create({
+          user,
+        }),
+      );
       return { ok: true };
     } catch (e) {
       return { ok: false, error: "Couldn't create account" };
@@ -46,7 +54,10 @@ export class UsersService {
   }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
     // make a JWT and give it to the user
     try {
-      const user = await this.users.findOne({ where: { username } });
+      const user = await this.users.findOne({
+        where: { username },
+        select: ['password'],
+      });
       if (!user) {
         return {
           ok: false,
@@ -89,7 +100,27 @@ export class UsersService {
     }
     if (email) {
       user.email = email;
+      user.verified = false;
+      await this.verifications.save(this.verifications.create({ user }));
     }
     return this.users.save(user);
+  }
+  async verifyEmail(code: string): Promise<boolean> {
+    try {
+      const verification = await this.verifications.findOne({
+        where: { code },
+        relations: ['user'],
+      });
+      if (verification) {
+        verification.user.verified = true;
+        console.log(verification.user);
+        this.users.save(verification.user);
+        return true;
+      }
+      throw new Error();
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 }
