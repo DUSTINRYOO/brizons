@@ -115,6 +115,9 @@ export class UsersService {
       if (password) {
         user.password = password;
       }
+      if (username) {
+        user.username = username;
+      }
       await this.users.save(user);
       return {
         ok: true,
@@ -138,7 +141,7 @@ export class UsersService {
       }
       return { ok: false, error: 'Verification not found.' };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, error: 'Could not verify email.' };
     }
   }
 }
