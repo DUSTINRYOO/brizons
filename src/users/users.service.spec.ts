@@ -58,7 +58,21 @@ describe('UsersService', () => {
   });
 
   describe('createAccount', () => {
-    it('should fail if user exists', () => {});
+    it('should fail if user exists', async () => {
+      usersRepository.findOne.mockResolvedValue({
+        id: 1,
+        email: '',
+        username: '',
+      });
+      const result = await service.createAccount({
+        email: '',
+        password: '',
+        username: '',
+      });
+      expect(result).toMatchObject({
+        ok: false,
+      });
+    });
   });
   it.todo('login');
   it.todo('findById');
