@@ -9,7 +9,7 @@ import { IsEmail, IsString } from 'class-validator';
 @ObjectType()
 @Entity()
 export class User extends CoreEntity {
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsString()
   username: string;
