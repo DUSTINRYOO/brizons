@@ -21,6 +21,9 @@ import { JwtMiddleware } from './jwt/jwtmiddleware';
 import { AuthModule } from './auth/auth.module';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
+import { OpenAiModule } from './openai/openai.module';
+import { OpenAiController } from './openai/openai.controller';
+import { OpenAiService } from './openai/openai.service';
 
 @Module({
   imports: [
@@ -72,8 +75,9 @@ import { MailModule } from './mail/mail.module';
     }),
     AuthModule,
     MailModule,
+    OpenAiModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, OpenAiController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
