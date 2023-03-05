@@ -12,7 +12,7 @@ import {
   TreeParent,
 } from 'typeorm';
 
-@InputType()
+@InputType('BrizInputType', { isAbstract: true })
 @ObjectType()
 @Entity()
 @Tree('closure-table')
