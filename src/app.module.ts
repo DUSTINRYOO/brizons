@@ -25,6 +25,7 @@ import { OpenAiModule } from './openai/openai.module';
 import { OpenAiController } from './openai/openai.controller';
 import { OpenAiService } from './openai/openai.service';
 import { BrizsModule } from './brizs/brizs.module';
+import { Briz } from './brizs/entities/briz.entity';
 
 @Module({
   imports: [
@@ -62,7 +63,7 @@ import { BrizsModule } from './brizs/brizs.module';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [Example, User, Verification],
+      entities: [Example, User, Briz, Verification],
     }),
     UsersModule,
     CommonModule,

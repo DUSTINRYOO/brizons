@@ -1,9 +1,10 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
-import { IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { Briz } from 'src/brizs/entities/briz.entity';
 
 @InputType({ isAbstract: true })
 @ObjectType()
@@ -26,7 +27,12 @@ export class User extends CoreEntity {
 
   @Column({ default: false })
   @Field((type) => Boolean)
+  @IsBoolean()
   verified: boolean;
+
+  @Field((type) => [Briz])
+  @OneToMany((type) => Briz, (Briz) => Briz.owner)
+  briz: Briz[];
 
   @BeforeUpdate()
   @BeforeInsert()
