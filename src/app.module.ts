@@ -24,6 +24,7 @@ import { MailModule } from './mail/mail.module';
 import { OpenAiModule } from './openai/openai.module';
 import { OpenAiController } from './openai/openai.controller';
 import { OpenAiService } from './openai/openai.service';
+import { BrizsModule } from './brizs/brizs.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { OpenAiService } from './openai/openai.service';
     AuthModule,
     MailModule,
     OpenAiModule,
+    BrizsModule,
   ],
   controllers: [AppController, OpenAiController],
   providers: [AppService],
