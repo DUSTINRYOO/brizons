@@ -7,6 +7,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as AWS from 'aws-sdk';
 
+const BUCKET_NAME = 'dustinbrizonsbucketlfg';
+
 @Controller('uploads')
 export class UploadsController {
   @Post('')
@@ -19,11 +21,19 @@ export class UploadsController {
       },
     });
     try {
+      const objectName = `${Date.now() + file.originalname}`;
       const upload = await new AWS.S3()
-        .createBucket({ Bucket: 'dustinbrizonsbucketlfg' })
+        .putObject({
+          Body: file.buffer,
+          Bucket: BUCKET_NAME,
+          Key: objectName,
+          ACL: 'public-read',
+        })
         .promise();
-      console.log(upload);
-      console.log(file);
-    } catch {}
+      const fileUrl = `https://dustinbrizonsbucketlfg.s3.amazonaws.com/${objectName}`;
+      return { fileUrl };
+    } catch (e) {
+      return null;
+    }
   }
 }
