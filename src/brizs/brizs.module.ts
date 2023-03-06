@@ -8,5 +8,6 @@ import { Briz } from './entities/briz.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Briz])],
   providers: [BrizsResolver, BrizsService],
+  exports: [BrizsService],
 })
 export class BrizsModule {}

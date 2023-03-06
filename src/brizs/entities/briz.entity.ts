@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
