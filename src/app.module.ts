@@ -26,6 +26,7 @@ import { OpenAiController } from './openai/openai.controller';
 import { OpenAiService } from './openai/openai.service';
 import { BrizsModule } from './brizs/brizs.module';
 import { Briz } from './brizs/entities/briz.entity';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { Briz } from './brizs/entities/briz.entity';
     MailModule,
     OpenAiModule,
     BrizsModule,
+    UploadsModule,
   ],
   controllers: [AppController, OpenAiController],
   providers: [AppService],
