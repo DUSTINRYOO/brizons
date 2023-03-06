@@ -12,9 +12,9 @@ export class BrizsResolver {
 
   @Mutation((returns) => CreateBrizOutput)
   async createBriz(
-    @AuthUser() owner: User,
+    @AuthUser() authUser: User,
     @Args('createBrizInput') createBrizInput: CreateBrizInput,
   ): Promise<CreateBrizOutput> {
-    return this.brizsService.createBriz(owner, createBrizInput);
+    return this.brizsService.createBriz(authUser, createBrizInput);
   }
 }

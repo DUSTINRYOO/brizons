@@ -30,9 +30,9 @@ export class User extends CoreEntity {
   @IsBoolean()
   verified: boolean;
 
-  @Field((type) => [Briz])
-  @OneToMany((type) => Briz, (Briz) => Briz.owner)
-  briz: Briz[];
+  @Field((type) => [Briz], { nullable: true })
+  @OneToMany((type) => Briz, (briz) => briz.owner)
+  brizs: Briz[];
 
   @BeforeUpdate()
   @BeforeInsert()

@@ -6,7 +6,6 @@ import {
   Column,
   Entity,
   ManyToOne,
-  RelationId,
   Tree,
   TreeChildren,
   TreeParent,
@@ -38,11 +37,8 @@ export class Briz extends CoreEntity {
   coverImg: string;
 
   @Field((type) => User)
-  @ManyToOne((type) => User, (user) => user.briz, { onDelete: 'CASCADE' })
+  @ManyToOne((type) => User, (user) => user.brizs, { onDelete: 'CASCADE' })
   owner: User;
-
-  @RelationId((briz: Briz) => briz.owner)
-  ownerId: number;
 
   @TreeChildren()
   children: Briz[];
