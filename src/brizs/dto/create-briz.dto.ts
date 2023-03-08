@@ -8,6 +8,7 @@ export class CreateBrizInput extends PickType(Briz, [
   'description',
   'metatags',
   'coverImg',
+  'grid',
 ]) {
   @Field((type) => Int, { nullable: true })
   parentBrizId?: number;

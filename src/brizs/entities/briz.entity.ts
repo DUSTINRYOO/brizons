@@ -5,11 +5,14 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   Tree,
   TreeChildren,
   TreeParent,
 } from 'typeorm';
+import { Grid } from './grid.entity';
 
 @InputType('BrizInputType', { isAbstract: true })
 @ObjectType()
@@ -35,6 +38,11 @@ export class Briz extends CoreEntity {
   @Field((type) => String)
   @IsString()
   coverImg: string;
+
+  @OneToOne((type) => Grid)
+  @Field((type) => Grid)
+  @JoinColumn()
+  grid: Grid;
 
   @Field((type) => User)
   @ManyToOne((type) => User, (user) => user.brizs, { onDelete: 'CASCADE' })

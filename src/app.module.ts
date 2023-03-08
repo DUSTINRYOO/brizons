@@ -27,6 +27,7 @@ import { OpenAiService } from './openai/openai.service';
 import { BrizsModule } from './brizs/brizs.module';
 import { Briz } from './brizs/entities/briz.entity';
 import { UploadsModule } from './uploads/uploads.module';
+import { Grid } from './brizs/entities/grid.entity';
 
 @Module({
   imports: [
@@ -66,7 +67,7 @@ import { UploadsModule } from './uploads/uploads.module';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [Example, User, Briz, Verification],
+      entities: [Example, User, Briz, Verification, Grid],
     }),
     UsersModule,
     CommonModule,

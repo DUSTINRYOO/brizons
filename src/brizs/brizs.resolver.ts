@@ -5,6 +5,7 @@ import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 
 import { User } from 'src/users/entities/user.entity';
 import { AuthUser } from 'src/auth/auth-user.decorator';
+import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 
 @Resolver((of) => Briz)
 export class BrizsResolver {
@@ -16,5 +17,13 @@ export class BrizsResolver {
     @Args('createBrizInput') createBrizInput: CreateBrizInput,
   ): Promise<CreateBrizOutput> {
     return this.brizsService.createBriz(authUser, createBrizInput);
+  }
+
+  @Query((returns) => GetBrizOutput)
+  async getBriz(
+    @AuthUser() authUser: User,
+    @Args('getBrizInput') getBrizInput: GetBrizInput,
+  ): Promise<GetBrizOutput> {
+    return this.brizsService.getBriz(authUser, getBrizInput);
   }
 }
