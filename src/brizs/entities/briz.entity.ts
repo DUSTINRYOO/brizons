@@ -39,8 +39,8 @@ export class Briz extends CoreEntity {
   @IsString()
   coverImg: string;
 
-  @OneToOne((type) => Grid)
   @Field((type) => Grid)
+  @OneToOne((type) => Grid, (grid) => grid.briz)
   @JoinColumn()
   grid: Grid;
 

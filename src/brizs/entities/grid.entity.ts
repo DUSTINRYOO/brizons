@@ -27,4 +27,7 @@ export class Grid extends CoreEntity {
   @Field((type) => Number)
   @IsNumber()
   rowEnd: number;
+
+  @OneToOne(() => Briz, (briz) => briz.grid)
+  briz: Briz;
 }

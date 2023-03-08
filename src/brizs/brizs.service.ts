@@ -26,10 +26,11 @@ export class BrizsService {
       if (!createBrizInput.parentBrizId) {
         const newBriz = this.briz.create(createBrizInput);
         const newGrid = this.grid.create(createBrizInput.grid);
+        const savedGrid = await this.grid.save(newGrid);
+        console.log(savedGrid);
         newBriz.owner = owner;
-        newBriz.grid = newGrid;
+        newBriz.grid = savedGrid;
         await this.briz.save(newBriz);
-        await this.grid.save(newGrid);
         return {
           ok: true,
         };
@@ -61,8 +62,9 @@ export class BrizsService {
     try {
       const ownerId = owner.id;
       const parentId = getBrizInput.parentId;
+      console.log(ownerId, parentId);
       const getBriz = await this.briz.find({
-        relations: { owner: true },
+        relations: { owner: true, grid: true },
         where: {
           owner: {
             id: ownerId,
