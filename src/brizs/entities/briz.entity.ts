@@ -40,8 +40,10 @@ export class Briz extends CoreEntity {
   coverImg: string;
 
   @Field((type) => Grid)
-  @OneToOne((type) => Grid, (grid) => grid.briz)
   @JoinColumn()
+  @OneToOne((type) => Grid, (grid) => grid.briz, {
+    eager: true,
+  })
   grid: Grid;
 
   @Field((type) => User)
