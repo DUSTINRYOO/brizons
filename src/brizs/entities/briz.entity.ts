@@ -19,7 +19,7 @@ import { Grid } from './grid.entity';
 @Entity()
 @Tree('closure-table')
 export class Briz extends CoreEntity {
-  @Column({ unique: true })
+  @Column()
   @Field((type) => String)
   @IsString()
   title: string;
@@ -28,6 +28,10 @@ export class Briz extends CoreEntity {
   @Field((type) => String)
   @IsString()
   description: string;
+
+  @Column({ nullable: true })
+  @Field((type) => String, { nullable: true })
+  text: string;
 
   @Column()
   @Field((type) => String)
