@@ -4,6 +4,7 @@ import { retry } from 'rxjs';
 import { User } from 'src/users/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
+import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 
 import { Briz } from './entities/briz.entity';
@@ -27,7 +28,6 @@ export class BrizsService {
         const newBriz = this.briz.create(createBrizInput);
         const newGrid = this.grid.create(createBrizInput.grid);
         const savedGrid = await this.grid.save(newGrid);
-        console.log(savedGrid);
         newBriz.owner = owner;
         newBriz.grid = savedGrid;
         await this.briz.save(newBriz);
@@ -51,6 +51,45 @@ export class BrizsService {
       return {
         ok: false,
         error: 'Could not create briz',
+      };
+    }
+  }
+
+  async deleteBriz(
+    owner: User,
+    deleteBrizInput: DeleteBrizInput,
+  ): Promise<DeleteBrizOutput> {
+    try {
+      const id = deleteBrizInput.brizId;
+      const briz = await this.briz.findOne({
+        relations: { owner: true, grid: true },
+        where: {
+          id,
+          grid: {
+            id,
+          },
+        },
+      });
+      if (!briz) {
+        return {
+          ok: false,
+          error: 'Briz not found',
+        };
+      }
+      if (owner.id !== briz.owner.id) {
+        return {
+          ok: false,
+          error: "You can't delete a briz that you don't own",
+        };
+      }
+      await this.grid.delete({ id: briz.grid.id });
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete briz.',
       };
     }
   }

@@ -29,7 +29,6 @@ export class Grid extends CoreEntity {
   rowEnd: number;
 
   @OneToOne(() => Briz, (briz) => briz.grid, {
-    cascade: ['insert'],
     onDelete: 'CASCADE',
   })
   briz: Briz;

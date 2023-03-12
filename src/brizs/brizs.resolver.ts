@@ -6,6 +6,7 @@ import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 import { User } from 'src/users/entities/user.entity';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
+import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 
 @Resolver((of) => Briz)
 export class BrizsResolver {
@@ -17,6 +18,22 @@ export class BrizsResolver {
     @Args('createBrizInput') createBrizInput: CreateBrizInput,
   ): Promise<CreateBrizOutput> {
     return this.brizsService.createBriz(authUser, createBrizInput);
+  }
+
+  /*   @Mutation((returns) => EditBrizOutput)
+  async editBriz(
+    @AuthUser() authUser: User,
+    @Args('editBrizInput') editBrizInput: EditBrizInput,
+  ): Promise<EditBrizOutput> {
+    return this.brizsService.editBriz(authUser, editBrizInput);
+  } */
+
+  @Mutation((returns) => DeleteBrizOutput)
+  async deleteBriz(
+    @AuthUser() authUser: User,
+    @Args('deleteBrizInput') deleteBrizInput: DeleteBrizInput,
+  ): Promise<DeleteBrizOutput> {
+    return this.brizsService.deleteBriz(authUser, deleteBrizInput);
   }
 
   @Query((returns) => GetBrizOutput)

@@ -46,9 +46,10 @@ export class Briz extends CoreEntity {
   @Field((type) => Grid)
   @JoinColumn()
   @OneToOne((type) => Grid, (grid) => grid.briz, {
-    eager: true,
+    cascade: true,
+    onDelete: 'CASCADE',
   })
-  grid: Grid;
+  grid!: Grid;
 
   @Field((type) => User)
   @ManyToOne((type) => User, (user) => user.brizs, { onDelete: 'CASCADE' })
