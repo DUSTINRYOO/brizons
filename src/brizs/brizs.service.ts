@@ -5,6 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
+import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 
 import { Briz } from './entities/briz.entity';
@@ -55,6 +56,50 @@ export class BrizsService {
     }
   }
 
+  async editBriz(
+    owner: User,
+    editBrizInput: EditBrizInput,
+  ): Promise<EditBrizOutput> {
+    try {
+      const id = editBrizInput.brizId;
+      const briz = await this.briz.findOne({
+        relations: { owner: true, grid: true },
+        where: {
+          id,
+          grid: {
+            id,
+          },
+        },
+      });
+      if (!briz) {
+        return {
+          ok: false,
+          error: 'Briz not found',
+        };
+      }
+      if (owner.id !== briz.owner.id) {
+        return {
+          ok: false,
+          error: "You can't edit a briz that you don't own",
+        };
+      }
+      await this.briz.save([
+        {
+          id,
+          ...editBrizInput,
+        },
+      ]);
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not edit Briz',
+      };
+    }
+  }
+
   async deleteBriz(
     owner: User,
     deleteBrizInput: DeleteBrizInput,
@@ -101,7 +146,6 @@ export class BrizsService {
     try {
       const ownerId = owner.id;
       const parentId = getBrizInput.parentId;
-      console.log(ownerId, parentId);
       const getBriz = await this.briz.find({
         relations: { owner: true, grid: true },
         where: {
