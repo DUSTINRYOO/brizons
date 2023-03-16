@@ -83,6 +83,10 @@ export class BrizsService {
           error: "You can't edit a briz that you don't own",
         };
       }
+      const grid = await this.grid.findOne({
+        where: { id: briz.grid.id },
+      });
+      await this.grid.save([{ id, ...editBrizInput.grid }]);
       await this.briz.save([
         {
           id,
@@ -105,6 +109,7 @@ export class BrizsService {
     deleteBrizInput: DeleteBrizInput,
   ): Promise<DeleteBrizOutput> {
     try {
+      console.log(owner, deleteBrizInput.brizId);
       const id = deleteBrizInput.brizId;
       const briz = await this.briz.findOne({
         relations: { owner: true, grid: true },
