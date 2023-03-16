@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { retry } from 'rxjs';
+
 import { User } from 'src/users/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
@@ -83,14 +83,13 @@ export class BrizsService {
           error: "You can't edit a briz that you don't own",
         };
       }
-      const grid = await this.grid.findOne({
-        where: { id: briz.grid.id },
-      });
-      await this.grid.save([{ id, ...editBrizInput.grid }]);
+      await this.grid.update({ id: briz.grid.id }, editBrizInput.grid);
       await this.briz.save([
         {
           id,
-          ...editBrizInput,
+          title: editBrizInput.title,
+          metatags: editBrizInput.metatags,
+          description: editBrizInput.description,
         },
       ]);
       return {
@@ -109,7 +108,6 @@ export class BrizsService {
     deleteBrizInput: DeleteBrizInput,
   ): Promise<DeleteBrizOutput> {
     try {
-      console.log(owner, deleteBrizInput.brizId);
       const id = deleteBrizInput.brizId;
       const briz = await this.briz.findOne({
         relations: { owner: true, grid: true },
