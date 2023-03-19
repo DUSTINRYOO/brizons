@@ -10,6 +10,7 @@ import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 
 import { Briz } from './entities/briz.entity';
 import { Grid } from './entities/grid.entity';
+import { Text } from './entities/text.entity';
 
 @Injectable()
 export class BrizsService {
@@ -18,6 +19,8 @@ export class BrizsService {
     private readonly briz: Repository<Briz>,
     @InjectRepository(Grid)
     private readonly grid: Repository<Grid>,
+    @InjectRepository(Text)
+    private readonly text: Repository<Text>,
   ) {}
 
   async createBriz(
@@ -110,12 +113,9 @@ export class BrizsService {
     try {
       const id = deleteBrizInput.brizId;
       const briz = await this.briz.findOne({
-        relations: { owner: true, grid: true },
+        relations: { owner: true, grid: true, text: true },
         where: {
           id,
-          grid: {
-            id,
-          },
         },
       });
       if (!briz) {
@@ -130,6 +130,7 @@ export class BrizsService {
           error: "You can't delete a briz that you don't own",
         };
       }
+      await this.text.delete({ id: briz.text.id });
       await this.grid.delete({ id: briz.grid.id });
       return {
         ok: true,
@@ -150,7 +151,7 @@ export class BrizsService {
       const ownerId = owner.id;
       const parentId = getBrizInput.parentId;
       const getBriz = await this.briz.find({
-        relations: { owner: true, grid: true },
+        relations: { owner: true, grid: true, text: true },
         where: {
           owner: {
             id: ownerId,
