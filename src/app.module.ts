@@ -28,6 +28,7 @@ import { BrizsModule } from './brizs/brizs.module';
 import { Briz } from './brizs/entities/briz.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { Grid } from './brizs/entities/grid.entity';
+import { Text } from './brizs/entities/text.entity';
 
 @Module({
   imports: [
@@ -67,7 +68,7 @@ import { Grid } from './brizs/entities/grid.entity';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [Example, User, Briz, Verification, Grid],
+      entities: [Example, User, Briz, Verification, Grid, Text],
     }),
     UsersModule,
     CommonModule,

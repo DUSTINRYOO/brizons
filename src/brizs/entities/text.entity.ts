@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity, JoinColumn, OneToOne, RelationId } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 import { Briz } from './briz.entity';
 
 @InputType('TextInputType', { isAbstract: true })
@@ -43,7 +43,7 @@ export class Text extends CoreEntity {
   @IsString()
   textRowAlign: string;
 
-  @OneToOne(() => Briz, (briz) => briz.grid, {
+  @OneToOne(() => Briz, (briz) => briz.text, {
     onDelete: 'CASCADE',
   })
   briz: Briz;

@@ -13,6 +13,7 @@ import {
   TreeParent,
 } from 'typeorm';
 import { Grid } from './grid.entity';
+import { Text } from './text.entity';
 
 @InputType('BrizInputType', { isAbstract: true })
 @ObjectType()
@@ -29,9 +30,13 @@ export class Briz extends CoreEntity {
   @IsString()
   description: string;
 
-  @Column({ nullable: true })
-  @Field((type) => String, { nullable: true })
-  text: string;
+  @Field((type) => Text, { nullable: true })
+  @JoinColumn()
+  @OneToOne((type) => Text, (text) => text.briz, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  text: Text;
 
   @Column()
   @Field((type) => String)
