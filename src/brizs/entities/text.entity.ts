@@ -9,6 +9,11 @@ import { Briz } from './briz.entity';
 @Entity()
 export class Text extends CoreEntity {
   @Column()
+  @Field((type) => String)
+  @IsString()
+  text: string;
+
+  @Column()
   @Field((type) => Number)
   @IsNumber()
   fontSize: number;
