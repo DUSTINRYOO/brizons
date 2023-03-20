@@ -130,7 +130,9 @@ export class BrizsService {
           error: "You can't delete a briz that you don't own",
         };
       }
-      await this.text.delete({ id: briz.text.id });
+      if (briz.text) {
+        await this.text.delete({ id: briz.text.id });
+      }
       await this.grid.delete({ id: briz.grid.id });
       return {
         ok: true,
