@@ -64,14 +64,12 @@ export class BrizsService {
     editBrizInput: EditBrizInput,
   ): Promise<EditBrizOutput> {
     try {
+      console.log(editBrizInput);
       const id = editBrizInput.brizId;
       const briz = await this.briz.findOne({
-        relations: { owner: true, grid: true },
+        relations: { owner: true, grid: true, text: true },
         where: {
           id,
-          grid: {
-            id,
-          },
         },
       });
       if (!briz) {
@@ -86,7 +84,12 @@ export class BrizsService {
           error: "You can't edit a briz that you don't own",
         };
       }
-      await this.grid.update({ id: briz.grid.id }, editBrizInput.grid);
+      if (editBrizInput.grid) {
+        await this.grid.update({ id: briz.grid.id }, editBrizInput.grid);
+      }
+      if (editBrizInput.text) {
+        await this.text.update({ id: briz.text.id }, editBrizInput.text);
+      }
       await this.briz.save([
         {
           id,
