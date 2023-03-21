@@ -3,7 +3,7 @@ import { CoreEntity } from 'src/common/entities/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsLowercase, IsString } from 'class-validator';
 import { Briz } from 'src/brizs/entities/briz.entity';
 
 @InputType('UserInputType', { isAbstract: true })
@@ -13,6 +13,7 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   @Field((type) => String)
   @IsString()
+  @IsLowercase()
   username: string;
 
   @Column({ select: false })

@@ -4,6 +4,8 @@ import { Briz } from '../entities/briz.entity';
 
 @InputType()
 export class GetBrizInput {
+  @Field((type) => String)
+  brizUserName: string;
   @Field((type) => Int, { nullable: true })
   parentId: number;
 }

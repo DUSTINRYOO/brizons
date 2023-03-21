@@ -15,6 +15,8 @@ import { Text } from './entities/text.entity';
 @Injectable()
 export class BrizsService {
   constructor(
+    @InjectRepository(User)
+    private readonly user: Repository<User>,
     @InjectRepository(Briz)
     private readonly briz: Repository<Briz>,
     @InjectRepository(Grid)
@@ -148,12 +150,18 @@ export class BrizsService {
   }
 
   async getBriz(
-    owner: User,
+    authUser: User,
     getBrizInput: GetBrizInput,
   ): Promise<GetBrizOutput> {
     try {
-      const ownerId = owner.id;
+      const authUserId = authUser.id;
       const parentId = getBrizInput.parentId;
+      const ownerName = getBrizInput.brizUserName;
+      const owner = await this.user.findOne({
+        where: { username: ownerName },
+      });
+      console.log(ownerName);
+      const ownerId = owner.id;
       const getBriz = await this.briz.find({
         relations: { owner: true, grid: true, text: true },
         where: {
