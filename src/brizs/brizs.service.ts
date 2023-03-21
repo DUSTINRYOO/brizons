@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
@@ -64,7 +64,6 @@ export class BrizsService {
     editBrizInput: EditBrizInput,
   ): Promise<EditBrizOutput> {
     try {
-      console.log(editBrizInput);
       const id = editBrizInput.brizId;
       const briz = await this.briz.findOne({
         relations: { owner: true, grid: true, text: true },
@@ -162,7 +161,7 @@ export class BrizsService {
             id: ownerId,
           },
           parent: {
-            id: parentId,
+            id: parentId ? parentId : IsNull(),
           },
         },
       });
