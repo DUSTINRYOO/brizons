@@ -8,6 +8,10 @@ import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 import {
+  GetParentBrizInput,
+  GetParentBrizOutput,
+} from './dto/get-parent-briz.dto';
+import {
   GetPinnedBrizInput,
   GetPinnedBrizOutput,
 } from './dto/get-pinned-briz.dto';
@@ -180,6 +184,37 @@ export class BrizsService {
       return {
         ok: true,
         getBriz,
+      };
+    } catch {
+      return { ok: false, error: 'Could not find Brizs' };
+    }
+  }
+
+  async getParentBriz(
+    authUser: User,
+    getParentBrizInput: GetParentBrizInput,
+  ): Promise<GetParentBrizOutput> {
+    try {
+      const authUserId = authUser.id;
+      const parentId = getParentBrizInput.parentId;
+      const ownerName = getParentBrizInput.brizUserName;
+      const owner = await this.user.findOne({
+        where: { username: ownerName },
+      });
+      const ownerId = owner.id;
+      const getParentBriz = await this.briz.findOne({
+        relations: { owner: true, parent: true },
+        where: {
+          id: parentId,
+          owner: {
+            id: ownerId,
+          },
+        },
+      });
+      return {
+        ok: true,
+        getParentBriz,
+        parentOfParentBriz: getParentBriz.parent,
       };
     } catch {
       return { ok: false, error: 'Could not find Brizs' };
