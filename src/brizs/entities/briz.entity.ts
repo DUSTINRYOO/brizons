@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -24,6 +24,11 @@ export class Briz extends CoreEntity {
   @Field((type) => String)
   @IsString()
   title: string;
+
+  @Column({ default: false })
+  @Field((type) => Boolean)
+  @IsBoolean()
+  pinned: boolean;
 
   @Column()
   @Field((type) => String)

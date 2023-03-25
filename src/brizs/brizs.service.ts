@@ -95,6 +95,7 @@ export class BrizsService {
         {
           id,
           title: editBrizInput.title,
+          pinned: editBrizInput.pinned,
           metatags: editBrizInput.metatags,
           description: editBrizInput.description,
         },

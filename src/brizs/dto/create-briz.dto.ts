@@ -5,6 +5,7 @@ import { Briz } from '../entities/briz.entity';
 @InputType()
 export class CreateBrizInput extends PickType(Briz, [
   'title',
+  'pinned',
   'description',
   'metatags',
   'coverImg',
