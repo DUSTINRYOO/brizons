@@ -8,6 +8,10 @@ import { AuthUser } from 'src/auth/auth-user.decorator';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
+import {
+  GetPinnedBrizInput,
+  GetPinnedBrizOutput,
+} from './dto/get-pinned-briz.dto';
 
 @Resolver((of) => Briz)
 export class BrizsResolver {
@@ -43,5 +47,13 @@ export class BrizsResolver {
     @Args('getBrizInput') getBrizInput: GetBrizInput,
   ): Promise<GetBrizOutput> {
     return this.brizsService.getBriz(authUser, getBrizInput);
+  }
+
+  @Query((returns) => GetPinnedBrizOutput)
+  async getPinnedBriz(
+    @AuthUser() authUser: User,
+    @Args('getPinnedBrizInput') getPinnedBrizInput: GetPinnedBrizInput,
+  ): Promise<GetPinnedBrizOutput> {
+    return this.brizsService.getPinnedBriz(authUser, getPinnedBrizInput);
   }
 }

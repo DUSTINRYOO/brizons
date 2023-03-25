@@ -7,6 +7,10 @@ import { CreateBrizInput, CreateBrizOutput } from './dto/create-briz.dto';
 import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
+import {
+  GetPinnedBrizInput,
+  GetPinnedBrizOutput,
+} from './dto/get-pinned-briz.dto';
 
 import { Briz } from './entities/briz.entity';
 import { Grid } from './entities/grid.entity';
@@ -161,7 +165,6 @@ export class BrizsService {
       const owner = await this.user.findOne({
         where: { username: ownerName },
       });
-      console.log(ownerName);
       const ownerId = owner.id;
       const getBriz = await this.briz.find({
         relations: { owner: true, grid: true, text: true },
@@ -177,6 +180,35 @@ export class BrizsService {
       return {
         ok: true,
         getBriz,
+      };
+    } catch {
+      return { ok: false, error: 'Could not find Brizs' };
+    }
+  }
+
+  async getPinnedBriz(
+    authUser: User,
+    getPinnedBrizInput: GetPinnedBrizInput,
+  ): Promise<GetPinnedBrizOutput> {
+    try {
+      const authUserId = authUser.id;
+      const ownerName = getPinnedBrizInput.brizUserName;
+      const owner = await this.user.findOne({
+        where: { username: ownerName },
+      });
+      const ownerId = owner.id;
+      const getPinnedBriz = await this.briz.find({
+        relations: { owner: true },
+        where: {
+          owner: {
+            id: ownerId,
+          },
+          pinned: true,
+        },
+      });
+      return {
+        ok: true,
+        getPinnedBriz,
       };
     } catch {
       return { ok: false, error: 'Could not find Brizs' };
