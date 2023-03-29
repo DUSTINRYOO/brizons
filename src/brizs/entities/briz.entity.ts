@@ -30,6 +30,11 @@ export class Briz extends CoreEntity {
   @IsBoolean()
   pinned: boolean;
 
+  @Column({ default: false })
+  @Field((type) => Boolean)
+  @IsBoolean()
+  inBucket: boolean;
+
   @Column()
   @Field((type) => String)
   @IsString()

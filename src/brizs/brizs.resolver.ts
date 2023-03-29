@@ -16,6 +16,10 @@ import {
   GetParentBrizInput,
   GetParentBrizOutput,
 } from './dto/get-parent-briz.dto';
+import {
+  GetInBucketBrizInput,
+  GetInBucketBrizOutput,
+} from './dto/get-inbucket-briz.dto';
 
 @Resolver((of) => Briz)
 export class BrizsResolver {
@@ -51,6 +55,14 @@ export class BrizsResolver {
     @Args('getBrizInput') getBrizInput: GetBrizInput,
   ): Promise<GetBrizOutput> {
     return this.brizsService.getBriz(authUser, getBrizInput);
+  }
+
+  @Query((returns) => GetInBucketBrizOutput)
+  async getInBucketBriz(
+    @AuthUser() authUser: User,
+    @Args('getInBucketBrizInput') getInBucketBrizInput: GetInBucketBrizInput,
+  ): Promise<GetInBucketBrizOutput> {
+    return this.brizsService.getInBucketBriz(authUser, getInBucketBrizInput);
   }
 
   @Query((returns) => GetParentBrizOutput)

@@ -8,6 +8,10 @@ import { DeleteBrizInput, DeleteBrizOutput } from './dto/delete-briz.dto';
 import { EditBrizInput, EditBrizOutput } from './dto/edit-briz.dto';
 import { GetBrizInput, GetBrizOutput } from './dto/get-briz.dto';
 import {
+  GetInBucketBrizInput,
+  GetInBucketBrizOutput,
+} from './dto/get-inbucket-briz.dto';
+import {
   GetParentBrizInput,
   GetParentBrizOutput,
 } from './dto/get-parent-briz.dto';
@@ -106,6 +110,7 @@ export class BrizsService {
           pinned: editBrizInput.pinned,
           metatags: editBrizInput.metatags,
           description: editBrizInput.description,
+          inBucket: editBrizInput.inBucket,
         },
       ]);
       return {
@@ -179,11 +184,45 @@ export class BrizsService {
           parent: {
             id: parentId ? parentId : IsNull(),
           },
+          inBucket: false,
         },
       });
       return {
         ok: true,
         getBriz,
+      };
+    } catch {
+      return { ok: false, error: 'Could not find Brizs' };
+    }
+  }
+
+  async getInBucketBriz(
+    authUser: User,
+    getInBucketBrizInput: GetInBucketBrizInput,
+  ): Promise<GetInBucketBrizOutput> {
+    try {
+      const authUserId = authUser.id;
+      const parentId = getInBucketBrizInput.parentId;
+      const ownerName = getInBucketBrizInput.brizUserName;
+      const owner = await this.user.findOne({
+        where: { username: ownerName },
+      });
+      const ownerId = owner.id;
+      const getInBucketBriz = await this.briz.find({
+        relations: { owner: true, grid: true, text: true },
+        where: {
+          owner: {
+            id: ownerId,
+          },
+          parent: {
+            id: parentId ? parentId : IsNull(),
+          },
+          inBucket: true,
+        },
+      });
+      return {
+        ok: true,
+        getInBucketBriz,
       };
     } catch {
       return { ok: false, error: 'Could not find Brizs' };

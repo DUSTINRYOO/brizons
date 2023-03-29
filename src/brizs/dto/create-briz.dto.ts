@@ -6,6 +6,7 @@ import { Briz } from '../entities/briz.entity';
 export class CreateBrizInput extends PickType(Briz, [
   'title',
   'pinned',
+  'inBucket',
   'description',
   'metatags',
   'coverImg',
