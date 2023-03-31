@@ -48,7 +48,7 @@ export class UsersResolver {
   @Mutation((returns) => EditProfileOutput)
   async editProfile(
     @AuthUser() authUser: User,
-    @Args('input') editProfileInput: EditProfileInput,
+    @Args('editProfileInput') editProfileInput: EditProfileInput,
   ): Promise<EditProfileOutput> {
     return this.usersService.editProfile(authUser.id, editProfileInput);
   }

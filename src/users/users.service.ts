@@ -99,9 +99,17 @@ export class UsersService {
 
   async editProfile(
     userId: number,
-    { username, password, email }: EditProfileInput,
+    {
+      username,
+      password,
+      email,
+      name,
+      biography,
+      profileImg,
+    }: EditProfileInput,
   ): Promise<EditProfileOutput> {
     try {
+      console.log(EditProfileInput);
       const id = userId;
       const user = await this.users.findOne({ where: { id } });
       if (email) {
@@ -118,6 +126,15 @@ export class UsersService {
       }
       if (username) {
         user.username = username;
+      }
+      if (name) {
+        user.name = name;
+      }
+      if (biography) {
+        user.biography = biography;
+      }
+      if (profileImg) {
+        user.profileImg = profileImg;
       }
       await this.users.save(user);
       return {
