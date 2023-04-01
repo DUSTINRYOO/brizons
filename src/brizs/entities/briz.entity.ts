@@ -53,6 +53,11 @@ export class Briz extends CoreEntity {
   @IsString()
   metatags: string;
 
+  @Column({ default: 100 })
+  @Field((type) => Number)
+  @IsString()
+  zindex: number;
+
   @Column()
   @Field((type) => String)
   @IsString()
