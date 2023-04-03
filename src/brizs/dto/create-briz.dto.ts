@@ -10,6 +10,7 @@ export class CreateBrizInput extends PickType(Briz, [
   'description',
   'metatags',
   'coverImg',
+  'zindex',
   'grid',
   'text',
 ]) {

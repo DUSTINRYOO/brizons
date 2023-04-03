@@ -111,6 +111,7 @@ export class BrizsService {
           metatags: editBrizInput.metatags,
           description: editBrizInput.description,
           inBucket: editBrizInput.inBucket,
+          zindex: editBrizInput.zindex,
         },
       ]);
       return {

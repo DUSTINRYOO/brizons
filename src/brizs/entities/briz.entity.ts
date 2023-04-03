@@ -1,5 +1,11 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -55,7 +61,7 @@ export class Briz extends CoreEntity {
 
   @Column({ default: 100 })
   @Field((type) => Number)
-  @IsString()
+  @IsNumber()
   zindex: number;
 
   @Column()
