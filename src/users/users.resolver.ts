@@ -8,6 +8,10 @@ import {
   CreateAccountOutput,
 } from './dtos/create-account.dto';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
+import {
+  GetOthersProfileInput,
+  GetOthersProfileOutput,
+} from './dtos/get-others-profile.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
@@ -42,6 +46,14 @@ export class UsersResolver {
     @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
     return this.usersService.findById(userProfileInput.userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Query((returns) => GetOthersProfileOutput)
+  async getOthersProfile(
+    @Args('getOthersProfileInput') getOthersProfileInput: GetOthersProfileInput,
+  ): Promise<GetOthersProfileOutput> {
+    return this.usersService.findByUsername(getOthersProfileInput.username);
   }
 
   @UseGuards(AuthGuard)

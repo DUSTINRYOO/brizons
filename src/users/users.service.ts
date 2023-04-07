@@ -13,6 +13,10 @@ import { Verification } from './entities/verification.entity';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { MailService } from 'src/mail/mail.service';
+import {
+  GetOthersProfileInput,
+  GetOthersProfileOutput,
+} from './dtos/get-others-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -88,6 +92,18 @@ export class UsersService {
   async findById(id: number): Promise<UserProfileOutput> {
     try {
       const user = await this.users.findOneOrFail({ where: { id } });
+      return {
+        ok: true,
+        user,
+      };
+    } catch (error) {
+      return { ok: false, error: 'User Not Found' };
+    }
+  }
+
+  async findByUsername(username: string): Promise<GetOthersProfileOutput> {
+    try {
+      const user = await this.users.findOneOrFail({ where: { username } });
       return {
         ok: true,
         user,
