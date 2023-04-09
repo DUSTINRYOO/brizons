@@ -39,7 +39,7 @@ export class UsersService {
       if (emailExists || usernameExists) {
         return {
           ok: false,
-          error: 'There is a user with that username or email already',
+          error: 'Username or Email already exists.',
         };
       }
       const user = await this.users.save(
@@ -125,9 +125,16 @@ export class UsersService {
     }: EditProfileInput,
   ): Promise<EditProfileOutput> {
     try {
-      console.log(EditProfileInput);
       const id = userId;
       const user = await this.users.findOne({ where: { id } });
+      const emailExists = await this.users.findOne({ where: { email } });
+      const usernameExists = await this.users.findOne({ where: { username } });
+      if (emailExists || usernameExists) {
+        return {
+          ok: false,
+          error: 'Username or Email already exists.',
+        };
+      }
       if (email) {
         user.email = email;
         user.verified = false;
