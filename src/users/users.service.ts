@@ -36,10 +36,16 @@ export class UsersService {
     try {
       const emailExists = await this.users.findOne({ where: { email } });
       const usernameExists = await this.users.findOne({ where: { username } });
-      if (emailExists || usernameExists) {
+      if (usernameExists) {
         return {
           ok: false,
-          error: 'Username or Email already exists.',
+          error: 'Username already exists.',
+        };
+      }
+      if (emailExists) {
+        return {
+          ok: false,
+          error: 'Email already exists.',
         };
       }
       const user = await this.users.save(
@@ -127,13 +133,25 @@ export class UsersService {
     try {
       const id = userId;
       const user = await this.users.findOne({ where: { id } });
-      const emailExists = await this.users.findOne({ where: { email } });
-      const usernameExists = await this.users.findOne({ where: { username } });
-      if (emailExists || usernameExists) {
-        return {
-          ok: false,
-          error: 'Username or Email already exists.',
-        };
+      if (email !== user.email) {
+        const emailExists = await this.users.findOne({ where: { email } });
+        if (emailExists) {
+          return {
+            ok: false,
+            error: 'Email already exists.',
+          };
+        }
+      }
+      if (username !== user.username) {
+        const usernameExists = await this.users.findOne({
+          where: { username },
+        });
+        if (usernameExists) {
+          return {
+            ok: false,
+            error: 'Username already exists.',
+          };
+        }
       }
       if (email) {
         user.email = email;
@@ -162,6 +180,8 @@ export class UsersService {
       await this.users.save(user);
       return {
         ok: true,
+        username: user.username,
+        profileImg: user.profileImg,
       };
     } catch (error) {
       return { ok: false, error: 'Could not update profile.' };
