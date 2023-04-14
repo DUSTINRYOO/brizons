@@ -20,6 +20,10 @@ import {
   GetInBucketBrizInput,
   GetInBucketBrizOutput,
 } from './dto/get-inbucket-briz.dto';
+import {
+  GetRecentBrizInput,
+  GetRecentBrizOutput,
+} from './dto/get-recent-briz.dto';
 
 @Resolver((of) => Briz)
 export class BrizsResolver {
@@ -79,5 +83,13 @@ export class BrizsResolver {
     @Args('getPinnedBrizInput') getPinnedBrizInput: GetPinnedBrizInput,
   ): Promise<GetPinnedBrizOutput> {
     return this.brizsService.getPinnedBriz(authUser, getPinnedBrizInput);
+  }
+
+  @Query((returns) => GetRecentBrizOutput)
+  async getRecentBriz(
+    @AuthUser() authUser: User,
+    @Args('getRecentBrizInput') getRecentBrizInput: GetRecentBrizInput,
+  ): Promise<GetRecentBrizOutput> {
+    return this.brizsService.getRecentBriz(authUser, getRecentBrizInput);
   }
 }

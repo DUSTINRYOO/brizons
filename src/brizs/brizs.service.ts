@@ -19,6 +19,10 @@ import {
   GetPinnedBrizInput,
   GetPinnedBrizOutput,
 } from './dto/get-pinned-briz.dto';
+import {
+  GetRecentBrizInput,
+  GetRecentBrizOutput,
+} from './dto/get-recent-briz.dto';
 
 import { Briz } from './entities/briz.entity';
 import { Grid } from './entities/grid.entity';
@@ -284,6 +288,44 @@ export class BrizsService {
       return {
         ok: true,
         getPinnedBriz,
+      };
+    } catch {
+      return { ok: false, error: 'Could not find Brizs' };
+    }
+  }
+
+  async getRecentBriz(
+    authUser: User,
+    getRecentBrizInput: GetRecentBrizInput,
+  ): Promise<GetRecentBrizOutput> {
+    try {
+      const authUserId = authUser.id;
+      const scrollPage = getRecentBrizInput.scrollPage;
+      const userExists = await this.user.findOne({
+        where: { id: authUserId },
+      });
+      if (!userExists) {
+        return {
+          ok: false,
+          error: 'User not found',
+        };
+      }
+      const MAX_BRIZ_PER_PAGE = 20;
+      const startPage = scrollPage < 1 ? 1 : scrollPage;
+      const [getRecentBriz] = await this.briz.findAndCount({
+        relations: { owner: true, text: true },
+        where: {
+          text: {
+            id: IsNull(),
+          },
+          inBucket: false,
+        },
+        skip: (startPage - 1) * MAX_BRIZ_PER_PAGE,
+        take: MAX_BRIZ_PER_PAGE,
+      });
+      return {
+        ok: true,
+        getRecentBriz,
       };
     } catch {
       return { ok: false, error: 'Could not find Brizs' };
