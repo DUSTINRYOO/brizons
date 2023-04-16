@@ -12,6 +12,10 @@ import {
   GetOthersProfileInput,
   GetOthersProfileOutput,
 } from './dtos/get-others-profile.dto';
+import {
+  GetUserProfilesInput,
+  GetUserProfilesOutput,
+} from './dtos/get-user-profiles.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
@@ -68,5 +72,13 @@ export class UsersResolver {
   @Mutation((returns) => VerifyEmailOutput)
   verifyEmail(@Args('input') { code }: VerifyEmailInput) {
     return this.usersService.verifyEmail(code);
+  }
+
+  @Query((returns) => GetUserProfilesOutput)
+  async getUserProfiles(
+    @AuthUser() authUser: User,
+    @Args('getUserProfilesInput') getUserProfilesInput: GetUserProfilesInput,
+  ): Promise<GetUserProfilesOutput> {
+    return this.usersService.getUserProfiles(authUser, getUserProfilesInput);
   }
 }

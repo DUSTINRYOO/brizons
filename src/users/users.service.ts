@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -17,6 +17,11 @@ import {
   GetOthersProfileInput,
   GetOthersProfileOutput,
 } from './dtos/get-others-profile.dto';
+import {
+  GetUserProfilesInput,
+  GetUserProfilesOutput,
+} from './dtos/get-user-profiles.dto';
+import { IsString } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -203,6 +208,37 @@ export class UsersService {
       return { ok: false, error: 'Verification not found.' };
     } catch (error) {
       return { ok: false, error: 'Could not verify email.' };
+    }
+  }
+
+  async getUserProfiles(
+    authUser: User,
+    getUserProfilesInput: GetUserProfilesInput,
+  ): Promise<GetUserProfilesOutput> {
+    try {
+      const authUserId = authUser.id;
+      const scrollPage = getUserProfilesInput.scrollPage;
+      const userExists = await this.users.findOne({
+        where: { id: authUserId },
+      });
+      if (!userExists) {
+        return {
+          ok: false,
+          error: 'User not found',
+        };
+      }
+      const MAX_USER_PER_PAGE = 6;
+      const startPage = scrollPage < 1 ? 1 : scrollPage;
+      const [getUserProfiles] = await this.users.findAndCount({
+        skip: (startPage - 1) * MAX_USER_PER_PAGE,
+        take: MAX_USER_PER_PAGE,
+      });
+      return {
+        ok: true,
+        getUserProfiles,
+      };
+    } catch {
+      return { ok: false, error: 'Could not find Brizs' };
     }
   }
 }
