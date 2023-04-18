@@ -29,6 +29,7 @@ import { Briz } from './brizs/entities/briz.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { Grid } from './brizs/entities/grid.entity';
 import { Text } from './brizs/entities/text.entity';
+import { DeleteModule } from './delete/delete.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { Text } from './brizs/entities/text.entity';
     OpenAiModule,
     BrizsModule,
     UploadsModule,
+    DeleteModule,
   ],
   controllers: [AppController, OpenAiController],
   providers: [AppService],

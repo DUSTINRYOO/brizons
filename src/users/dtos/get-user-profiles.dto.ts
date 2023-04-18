@@ -12,4 +12,7 @@ export class GetUserProfilesInput {
 export class GetUserProfilesOutput extends CoreOutput {
   @Field((type) => [User])
   getUserProfiles?: User[];
+
+  @Field((type) => Number)
+  totalUsersCount?: number;
 }

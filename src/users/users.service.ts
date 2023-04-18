@@ -95,7 +95,7 @@ export class UsersService {
     } catch (error) {
       return {
         ok: false,
-        error: "Can't log user in.",
+        error: "Can't login.",
       };
     }
   }
@@ -227,15 +227,16 @@ export class UsersService {
           error: 'User not found',
         };
       }
-      const MAX_USER_PER_PAGE = 6;
+      const MAX_USER_PER_PAGE = 18;
       const startPage = scrollPage < 1 ? 1 : scrollPage;
-      const [getUserProfiles] = await this.users.findAndCount({
+      const [getUserProfiles, totalUsersCount] = await this.users.findAndCount({
         skip: (startPage - 1) * MAX_USER_PER_PAGE,
         take: MAX_USER_PER_PAGE,
       });
       return {
         ok: true,
         getUserProfiles,
+        totalUsersCount,
       };
     } catch {
       return { ok: false, error: 'Could not find Brizs' };
