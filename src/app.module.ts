@@ -54,8 +54,10 @@ import { DeleteModule } from './delete/delete.module';
       }),
     }),
     GraphQLModule.forRoot({
+      playground: process.env.NODE_ENV !== 'production',
       autoSchemaFile: true,
       driver: ApolloDriver,
+      cache: 'bounded',
       context: ({ req }) => ({ user: req['user'] }),
     }),
     ExampleModule,
