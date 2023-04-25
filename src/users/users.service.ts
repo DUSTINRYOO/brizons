@@ -22,6 +22,10 @@ import {
   GetUserProfilesOutput,
 } from './dtos/get-user-profiles.dto';
 import { IsString } from 'class-validator';
+import {
+  DeleteAccountInput,
+  DeleteAccountOutput,
+} from './dtos/delete-account.dto';
 
 @Injectable()
 export class UsersService {
@@ -65,6 +69,41 @@ export class UsersService {
       return { ok: true };
     } catch (e) {
       return { ok: false, error: "Couldn't create account" };
+    }
+  }
+
+  async deleteAccount(
+    owner: User,
+    deleteAccountInput: DeleteAccountInput,
+  ): Promise<DeleteAccountOutput> {
+    try {
+      const username = deleteAccountInput.username;
+      const user = await this.users.findOne({
+        where: {
+          username,
+        },
+      });
+      if (!user) {
+        return {
+          ok: false,
+          error: 'User not found',
+        };
+      }
+      if (owner.username !== user.username && owner.username !== 'brizons') {
+        return {
+          ok: false,
+          error: 'You can delete only your account',
+        };
+      }
+      await this.users.delete({ username });
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete briz.',
+      };
     }
   }
 

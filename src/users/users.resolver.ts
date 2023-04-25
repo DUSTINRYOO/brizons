@@ -7,6 +7,10 @@ import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/create-account.dto';
+import {
+  DeleteAccountInput,
+  DeleteAccountOutput,
+} from './dtos/delete-account.dto';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import {
   GetOthersProfileInput,
@@ -31,6 +35,15 @@ export class UsersResolver {
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
     return this.usersService.createAccount(createAccountInput);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((returns) => DeleteAccountOutput)
+  async deleteAccount(
+    @AuthUser() authUser: User,
+    @Args('deleteAccountInput') deleteAccountInput: DeleteAccountInput,
+  ): Promise<DeleteAccountOutput> {
+    return this.usersService.deleteAccount(authUser, deleteAccountInput);
   }
 
   @Mutation((returns) => LoginOutput)
