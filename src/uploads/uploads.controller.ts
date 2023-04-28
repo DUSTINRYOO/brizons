@@ -20,8 +20,11 @@ export class UploadsController {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
     });
+
     try {
-      const objectName = `${Date.now() + file.originalname}`;
+      const objectName = `${
+        Date.now() + file.originalname + '_' + file.mimetype.slice(0, 5)
+      }`;
       const upload = await new AWS.S3()
         .putObject({
           Body: file.buffer,
